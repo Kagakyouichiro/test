@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.usertestserver.nacosdiscovery.dao.UserDao">
+<resultMap id="BaseResultMap" type="com.example.usertestserver.nacosdiscovery.dto.User">
+    <result column="user_id" property="userId" jdbcType="INTEGER"/>
+    <result column="total" property="total" jdbcType="INTEGER"/>
+    <result column="used" property="used" jdbcType="INTEGER"/>
+    <result column="balance" property="balance" jdbcType="INTEGER"/>
+</resultMap>
+<select id="queryBalance" resultType="int">
+    select balance from t_account
+    where user_id = #{userId};
+</select>
+
+<update id="comsumer">
+    update  t_account
+        set balance = balance - #{money}, used =used + #{money}
+        where user_id = #{userId};
+</update>
+
+<update id="returnMoney">
+    update  t_account
+    set balance = balance + #{money}, used =used - #{money}
+    where user_id = #{userId};
+</update>
+
+<select id="selectAccountDetail" resultMap="BaseResultMap">
+    select user_id, total, used, balance from t_account
+    where user_id = #{userId};
+</select>
+
+<update id="addMoney">
+    update  t_account
+    set total = total + #{money}, balance =balance + #{money}
+    where user_id = #{userId};
+</update>
+
+<insert id="addUser">
+    insert into t_account(user_id,total,used,balance)
+    values(#{userId},#{total},#{used},#{balance})
+</insert>
+
+</mapper>
